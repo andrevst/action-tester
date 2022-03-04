@@ -15,5 +15,5 @@ jobs:
       - name: Add Jira Ticket number env property
         run: |
           echo "JIRA_TICKET=`echo ${GITHUB_REF##*/}| cut -c1-7`" >> $GITHUB_ENV
-          echo ${JIRA_TICKET}
+          echo $JIRA_TICKET
         
