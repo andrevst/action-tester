@@ -32,10 +32,10 @@ jobs:
             echo APP_VERSION=$GITHUB_SHA >> $GITHUB_OUTPUT
             echo ENVIRONMENT=sandbox >> $GITHUB_OUTPUT
             echo ${GITHUB_REF#refs/*/}
-          elif [ ${GITHUB_REF#refs/*/} =~ $RC_REGEX ]; then
+          elif [ ${GITHUB_REF#refs/*/} == $RC_REGEX ]; then
             echo APP_VERSION=${{ github.event.ref }} >> $GITHUB_OUTPUT
             echo ENVIRONMENT=staging >> $GITHUB_OUTPUT
-          elif [ ${GITHUB_REF#refs/*/} =~ $VERSION_REGEX ]; then
+          elif [ ${GITHUB_REF#refs/*/} == $VERSION_REGEX ]; then
             echo APP_VERSION=${{ github.event.ref }} >> $GITHUB_OUTPUT
             echo ENVIRONMENT=beta >> $GITHUB_OUTPUT
           else
