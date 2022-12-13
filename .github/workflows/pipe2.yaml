@@ -31,15 +31,16 @@ jobs:
           if [ ${{ github.event.ref }} == 'refs/heads/main' ]; then
             echo APP_VERSION=$GITHUB_SHA >> $GITHUB_OUTPUT
             echo ENVIRONMENT=sandbox >> $GITHUB_OUTPUT
+            echo ${{ github.event.ref }}
           elif [ ${{ github.event.ref }} =~ $RC_REGEX ]; then
-            echo APP_VERSION=$GITHUB_SHA >> $GITHUB_OUTPUT
+            echo APP_VERSION=${{ github.event.ref }} >> $GITHUB_OUTPUT
             echo ENVIRONMENT=staging >> $GITHUB_OUTPUT
           elif [ ${{ github.event.ref }} =~ $VERSION_REGEX ]; then
-            echo APP_VERSION=$GITHUB_SHA >> $GITHUB_OUTPUT
+            echo APP_VERSION=${{ github.event.ref }} >> $GITHUB_OUTPUT
             echo ENVIRONMENT=beta >> $GITHUB_OUTPUT
           else
-            echo APP_VERSION=${{ github.event.inputs.version }} >> $GITHUB_OUTPUT
-            echo ENVIRONMENT=${{ github.event.inputs.env }} >> $GITHUB_OUTPUT
+            echo APP_VERSION=erro >> $GITHUB_OUTPUT
+            echo ENVIRONMENT=${{ github.event.ref }} >> $GITHUB_OUTPUT
           fi
               
     outputs:
