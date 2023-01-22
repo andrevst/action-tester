@@ -1,19 +1,19 @@
-name: CI - Pipeline
+
+name:  update Pipeline
 
 on:
-  pull_request:
-    branches: ["main"]
-  push:
-    tags:
-      - "v*.*.*"
-      - "v*.*.*-rc"
-    branches:
-      - "main"
-  
-# if: ${{ startsWith(github.event.ref, 'refs/tags/v') && endsWith(github.event.ref, '-rc') }}
-#Staging
-# if: ${{ startsWith(github.event.ref, 'refs/tags/v') && !endsWith(github.event.ref, '-rc') }}
-# Prod or Beta
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: 'Image tag'
+        required: true
+        default: ''
+        type: string
+      env:
+        description: 'Environment'
+        required: true
+        default: 'sandbox'
+        type: string
 
 jobs:
   pre-work:
@@ -21,46 +21,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+        
+      - name: Checkout
+        uses: actions/checkout@v3
+        
 
-      - name: Setup environment Variables
-        id: set-vars
-        shell: bash
-        run: |
-          RC_REGEX='v[0-9].[0-9].[0-9]-rc'
-          VERSION_REGEX='^v[0-9].[0-9].[0-9]$'
-          VERSION=${GITHUB_REF#refs/*/}
-          if [ ${{ github.event.ref }} == 'refs/heads/main' ]; then
-            echo APP_VERSION=$GITHUB_SHA >> $GITHUB_OUTPUT
-            echo ENVIRONMENT=sandbox >> $GITHUB_OUTPUT
-            echo $VERSION
-            echo $VERSION_REGEX
-            echo $RC_REGEX
-          elif [[ "$VERSION" =~ $RC_REGEX ]]; then
-            echo APP_VERSION=$VERSION >> $GITHUB_OUTPUT
-            echo ENVIRONMENT=staging >> $GITHUB_OUTPUT
-          elif [[ "$VERSION" =~ $VERSION_REGEX ]]; then
-            echo APP_VERSION=$VERSION >> $GITHUB_OUTPUT
-            echo ENVIRONMENT=beta >> $GITHUB_OUTPUT
-          else
-            echo APP_VERSION=erro >> $GITHUB_OUTPUT
-            echo ENVIRONMENT=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
-          fi
-              
-    outputs:
-      app_version: ${{ steps.set-vars.outputs.APP_VERSION }}
-      environment: ${{ steps.set-vars.outputs.ENVIRONMENT }}
-      
-  result:
-    needs: [pre-work]
-    name: show result
-    runs-on: ubuntu-latest
-    
-    steps:
+      - uses: 1arp/create-a-file-action@0.2
+        if: ${{ github.event.inputs.env }} != 'production'
+        with:
+          path: "./"
+          file: 'django_settings.tftpl'
+          content: django_settings
 
-      - name: Results
-        id: set-vars
-        shell: bash
-        run: |
-          echo ${{ needs.pre-work.outputs.app_version }}
-          echo ${{ needs.pre-work.outputs.environment }}
-  
+      - uses: 1arp/create-a-file-action@0.2
+        if: ${{ github.event.inputs.env }} == 'production'
+        with:
+          path: "./"
+          file: 'django_settings.tftpl'
+          content: django_settings_production
