@@ -26,16 +26,10 @@ jobs:
         uses: actions/checkout@v3
         
 
-      - uses: 1arp/create-a-file-action@0.2
+      - name: not prod
         if: ${{ github.event.inputs.env }} != 'production'
-        with:
-          path: "./"
-          file: 'django_settings.tftpl'
-          content: django_settings
+        run: echo "not production"
 
-      - uses: 1arp/create-a-file-action@0.2
+      - name: prod
         if: ${{ github.event.inputs.env }} == 'production'
-        with:
-          path: "./"
-          file: 'django_settings.tftpl'
-          content: django_settings_production
+        run: echo "production"
