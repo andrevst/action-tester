@@ -27,9 +27,9 @@ jobs:
         
 
       - name: not prod
-        if: ${{ ${{ github.event.inputs.env }} != 'production' }}
+        if: ${{ github.event.inputs.env != 'production' }}
         run: echo "not production"
 
       - name: prod
-        if: ${{ ${{ github.event.inputs.env }} == 'production' }}
+        if: ${{ github.event.inputs.env == 'production' }}
         run: echo "production"
