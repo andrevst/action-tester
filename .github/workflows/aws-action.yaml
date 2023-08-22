@@ -1,0 +1,35 @@
+name: CD Pipeline - Build and Sync to S3
+
+on:
+  push:
+    branches:
+      - main
+# using push to development as trigger because workflow_dispatch might work only when this action reach the default branch
+  workflow_dispatch:
+
+#permissions:
+#  id-token: write
+#  contents: write
+  
+env:
+  # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  aws-access-key-id: "AKIARSG5GX4FZGM3EOHK"
+  aws-secret-access-key: "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"
+# It will be a secret when we have repo admin access.
+  
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+# Deployment phase
+
+    - name: Sync to S3
+      run: |
+        export AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}
+        export AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws s3 sync ./application/out/ s3://your-bucket-name/ --delete
