@@ -4,18 +4,17 @@ on:
   push:
     branches:
       - main
-# using push to development as trigger because workflow_dispatch might work only when this action reach the default branch
-  workflow_dispatch:
 
-#permissions:
-#  id-token: write
-#  contents: write
+permissions:
+  id-token: write
+  contents: write
   
 env:
-  # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  aws-region: "us-east-1"
+  environment: ""
+  bucket_name: "action-tester"
 # It will be a secret when we have repo admin access.
   
 jobs:
@@ -28,9 +27,15 @@ jobs:
 
 # Deployment phase
 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: Sync to S3
-      run: |
-        export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-        export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws s3 sync . s3://action-tester/ --delete --region us-east-1
+      working-directory: .github/workflows/
+      run: aws s3 sync . s3://${{ env.BUCKET_NAME }}/ --delete
+
 
