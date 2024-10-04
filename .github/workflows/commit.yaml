@@ -21,7 +21,7 @@ on:
     branches:
       - 'main'
     paths:
-      - '*.txt'
+      - 'workflows/commit.yaml'
 env:
     IMAGE_TAG: ${{ github.sha }}
 
