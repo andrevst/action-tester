@@ -16,16 +16,12 @@ on:
         required: true
         type: choice
         options:
-          - production
-          - qa
-          - develop
+          - main
   push:
     branches:
       - 'main'
     paths:
-      - 'workflows/packages-build-push.yaml'
-      - 'packages/**'
-      - 'Dockerfile*'
+      - '*.txt'
 env:
     IMAGE_TAG: ${{ github.sha }}
 
