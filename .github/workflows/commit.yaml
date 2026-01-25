@@ -2,28 +2,7 @@ name: Build and Push App
 
 on:
   schedule:
-    - cron: '48 0 * * *'
-  workflow_dispatch:
-    inputs:
-      repository:
-        description: 'Select which package to deploy'
-        required: true
-        type: choice
-        options:
-          - subscriber
-          - admin
-        default: subscriber
-      environment:
-        description: 'Environment'
-        required: true
-        type: choice
-        options:
-          - main
-  push:
-    branches:
-      - 'main'
-    paths:
-      - '.github/workflows/commit.yaml'
+    - cron: '30 2 * * *'
 env:
     IMAGE_TAG: ${{ github.sha }}
 
