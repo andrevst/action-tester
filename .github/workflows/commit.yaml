@@ -2,7 +2,7 @@ name: Build and Push App
 
 on:
   schedule:
-    - cron: '30 2 * * *'
+    - cron: '*/5 * * * *'
 env:
     IMAGE_TAG: ${{ github.sha }}
 
