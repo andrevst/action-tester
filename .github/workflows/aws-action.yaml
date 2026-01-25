@@ -3,7 +3,7 @@ name: CD Pipeline - Build and Sync to S3
 on:
   push:
     branches:
-      - main
+      - aws
 
 permissions:
   id-token: write
