@@ -10,3 +10,4 @@ Updating Helm values with new image tag: 28040335e3ad250d407b8faef55dcd9910e527f
 Updating Helm values with new image tag: 06d9e2be9719c834522c4822dc3f4edfe372de31
 Updating Helm values with new image tag: ad060895fa36a4cd11f1605f601d152784d91cde
 Updating Helm values with new image tag: 83cdd063bd07d2818f867f17dd8f0738c853d704
+Updating Helm values with new image tag: 8f3b09fee309aabab0c89b6ae30c01476c4469b1
